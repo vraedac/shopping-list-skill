@@ -2,7 +2,7 @@
 Manage a shopping list
 
 ## About
-Manage a shopping list as a todoist project.  you can add or remove items, query tific items or have mycroft read the whole list to you.
+Manage a shopping list as a Todoist project.  you can add or remove items, query specific items or have mycroft read the whole list to you.
 
 ## Examples
 * "Add cookies to my shopping list"
