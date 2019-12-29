@@ -7,7 +7,8 @@ class ShoppingList(MycroftSkill):
 
     @intent_file_handler('list.shopping.intent')
     def handle_list_shopping(self, message):
-        self.speak_dialog('list.shopping')
+		item_name = message.data.get('item')
+        self.speak_dialog('list.shopping', {'item': item_name})
 
 
 def create_skill():
