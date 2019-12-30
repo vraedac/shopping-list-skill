@@ -9,6 +9,11 @@ class ShoppingList(MycroftSkill):
 	def handle_list_shopping(self, message):
 		item_name = message.data.get('item')
 		self.speak_dialog('list.shopping', {'item': item_name})
+	
+	@intent_file_handler('remove.from.shopping.list.intent')
+	def handle_remove_from_shopping_list(self, message):
+		item_name = message.data.get('item')
+		self.speak_dialog('remove.from.shopping.list', {'item': item_name})
 
 
 def create_skill():
