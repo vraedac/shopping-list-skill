@@ -17,7 +17,7 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('IsItemOnList.intent')
 	def handle_is_item_on_list(self, message):
-		item_name = message.data.get('item)')
+		item_name = message.data.get('item')
 		self.speak_dialog('ItemNotOnList', {'item': item_name})
 
 
