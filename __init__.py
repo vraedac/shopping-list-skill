@@ -15,6 +15,11 @@ class ShoppingList(MycroftSkill):
 		item_name = message.data.get('item')
 		self.speak_dialog('remove.from.shopping.list', {'item': item_name})
 
+	@intent_file_handler('IsItemOnList.intent')
+	def handle_is_item_on_list(self, message):
+		item_name = message.data.get('item)')
+		self.speak_dialog('ItemNotOnList', {'item': item_name})
+
 
 def create_skill():
 	return ShoppingList()
