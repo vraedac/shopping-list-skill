@@ -1,4 +1,2 @@
 add {item} to (my | the | our | your) (shopping | grocery) list
-remove {item} from (my | the | our | your) (shopping | grocery) list
-what is on (my | the | our | your) (shopping | grocery) list
-is {item} on (my | the | our | your) (shopping | grocery) list
+put {item} on (my | the | our | your) (shopping | grocery) list

@@ -1,4 +1,2 @@
-Yes, {item} is on the shopping list
-No, {item} is not on your grocery list
-Ok, removing {item} from your shopping list
-Alright, adding {item} to your shopping list
+(alright | okay), adding {item} to (the | your) (grocery | shopping) list
+(alright | okay), i have added {item} to (the | your) (shopping | grocery) list
