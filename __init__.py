@@ -5,10 +5,12 @@ class ShoppingList(MycroftSkill):
 	def __init__(self):
 		MycroftSkill.__init__(self)
 
-	@intent_file_handler('list.shopping.intent')
-	def handle_list_shopping(self, message):
-		item_name = message.data.get('item')
-		self.speak_dialog('list.shopping', {'item': item_name})
+	@intent_file_handler('add.to.shopping.list.intent')
+	def handle_add_to_list(self, message):
+		item1_name = message.data.get('item1')
+		item2_name = message.data.get('item2')
+
+		self.speak_dialog('add.to.shopping.list', {'item1': item_name})
 
 
 def create_skill():
