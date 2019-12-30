@@ -4,9 +4,13 @@ from mycroft import MycroftSkill, intent_file_handler
 class ShoppingList(MycroftSkill):
 	def __init__(self):
 		MycroftSkill.__init__(self)
+		import todoist
+		self.todoist_api = todoist.TodoistAPI('1a40a20b47e1d4e22824c820c9cd057bc738467e')
 
 	@intent_file_handler('list.shopping.intent')
 	def handle_list_shopping(self, message):
+		project = self.todoist_api.projects.get_by_name('Grocery List')
+		self.log.info(project)
 		item_name = message.data.get('item')
 		self.speak_dialog('list.shopping', {'item': item_name})
 	
