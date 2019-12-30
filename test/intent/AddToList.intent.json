@@ -1,6 +1,6 @@
 {
 	"utterance": "add cookies to my shopping list",
-	"intent": "list.shopping.intent",
+	"intent_type": "list.shopping.intent",
 	"expected_data": {
 		"item": "cookies"
 	}
