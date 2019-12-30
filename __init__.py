@@ -10,7 +10,7 @@ class ShoppingList(MycroftSkill):
 		item1_name = message.data.get('item1')
 		item2_name = message.data.get('item2')
 
-		self.speak_dialog('add.to.shopping.list', {'item1': item_name})
+		self.speak_dialog('add.to.shopping.list', {'item1': item1_name})
 
 
 def create_skill():
