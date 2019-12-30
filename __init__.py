@@ -9,8 +9,7 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('list.shopping.intent')
 	def handle_list_shopping(self, message):
-		project = self.todoist_api.projects.get_by_name('Grocery List')
-		self.log.info(project)
+		self.log.info(self.todoist_api.state['projects'])
 		item_name = message.data.get('item')
 		self.speak_dialog('list.shopping', {'item': item_name})
 	
