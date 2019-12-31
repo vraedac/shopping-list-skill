@@ -22,7 +22,7 @@ class ShoppingList(MycroftSkill):
 			
 		if listProject is not None:
 			self.todoist_api.items.add(item_name, project_id=listProject['id'])
-			self.tooist_api.commit()
+			self.todoist_api.commit()
 
 		self.speak_dialog('list.shopping', {'item': item_name})
 	
