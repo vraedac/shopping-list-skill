@@ -7,8 +7,6 @@ class ShoppingList(MycroftSkill):
 		import todoist
 		self.todoist_api = todoist.TodoistAPI('1a40a20b47e1d4e22824c820c9cd057bc738467e')
 
-	# @intent_file_handler('list.shopping.intent')
-	# def handle_list_shopping(self, message):
 	@intent_file_handler('AddToList.intent')
 	def handle_add_to_list(self, message):
 		item_name = message.data.get('item')
@@ -18,11 +16,8 @@ class ShoppingList(MycroftSkill):
 			self.todoist_api.items.add(item_name, project_id=list_project['id'])
 			self.todoist_api.commit()
 
-		# self.speak_dialog('list.shopping', {'item': item_name})
 		self.speak_dialog('AddToList', {'item': item_name})
 	
-	# @intent_file_handler('remove.from.shopping.list.intent')
-	# def handle_remove_from_shopping_list(self, message):
 	@intent_file_handler('RemoveFromList.intent')
 	def handle_remove_from_list(self, message):
 		item_name = message.data.get('item')
@@ -34,13 +29,24 @@ class ShoppingList(MycroftSkill):
 					task.delete()
 					self.todoist_api.commit()
 
-		# self.speak_dialog('remove.from.shopping.list', {'item': item_name})
 		self.speak_dialog('RemoveFromList', {'item': item_name})
 
 	@intent_file_handler('IsItemOnList.intent')
 	def handle_is_item_on_list(self, message):
 		item_name = message.data.get('item')
-		self.speak_dialog('ItemNotOnList', {'item': item_name})
+		list_project = self.get_project()
+		found = False
+
+		if list_project is not None:
+			for task in self.todoist_api.state['items']:
+				if task['project_id'] == list_project['id'] and task['content'] == item_name:
+					found = True
+					break
+
+		if found = True:
+			self.speak_dialog('ItemIsOnList', {'item': item_name})
+		else:
+			self.speak_dialog('ItemNotOnList', {'item': item_name})
 
 	def _get_project(self):
 		self.todoist_api.sync()
