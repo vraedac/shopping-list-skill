@@ -34,7 +34,7 @@ class ShoppingList(MycroftSkill):
 	@intent_file_handler('IsItemOnList.intent')
 	def handle_is_item_on_list(self, message):
 		item_name = message.data.get('item')
-		list_project = self.get_project()
+		list_project = self._get_project()
 		found = False
 
 		if list_project is not None:
