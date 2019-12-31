@@ -1,7 +1,7 @@
 {
-	"utterance": "remove cookies from my shopping list",
-	"intent_type": "RemoveFromList.intent",
+	"utterance": "is bacon on the shopping list",
+	"intent_type": "IsItemOnList.intent",
 	"expected_data": {
-		"item": "cookies"
+		"item": "bacon"
 	}
 }
