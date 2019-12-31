@@ -10,18 +10,10 @@ class ShoppingList(MycroftSkill):
 	@intent_file_handler('list.shopping.intent')
 	def handle_list_shopping(self, message):
 		item_name = message.data.get('item')
-		# self.todoist_api.sync()
-		# projects = self.todoist_api.state['projects']
-
-		# listProject = None
-		# for proj in projects:
-		# 	if proj['name'] == 'Grocery List': # TODO make this a configurable setting
-		# 		listProject = proj
-
-		listProject = self.__get_project__()
+		list_project = self._get_project()
 			
-		if listProject is not None:
-			self.todoist_api.items.add(item_name, project_id=listProject['id'])
+		if list_project is not None:
+			self.todoist_api.items.add(item_name, project_id=list_project['id'])
 			self.todoist_api.commit()
 
 		self.speak_dialog('list.shopping', {'item': item_name})
@@ -29,6 +21,12 @@ class ShoppingList(MycroftSkill):
 	@intent_file_handler('remove.from.shopping.list.intent')
 	def handle_remove_from_shopping_list(self, message):
 		item_name = message.data.get('item')
+		list_project = self._get_project()
+
+		if list_project is not None:
+			self.todoist_api.items.remove(item_name, project_id=list_project['id'])
+			self.todoist_api.commit()
+
 		self.speak_dialog('remove.from.shopping.list', {'item': item_name})
 
 	@intent_file_handler('IsItemOnList.intent')
@@ -36,7 +34,7 @@ class ShoppingList(MycroftSkill):
 		item_name = message.data.get('item')
 		self.speak_dialog('ItemNotOnList', {'item': item_name})
 
-	def __get_project__(self):
+	def _get_project(self):
 		self.todoist_api.sync()
 		projects = self.todoist_api.state['projects']
 
