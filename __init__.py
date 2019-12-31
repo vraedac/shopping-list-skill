@@ -17,7 +17,7 @@ class ShoppingList(MycroftSkill):
 
 		listProject = None
 		for proj in projects:
-			if proj.name == 'Grocery List':
+			if proj['name'] == 'Grocery List':
 				listProject = proj
 			
 		if listProject is not None:
