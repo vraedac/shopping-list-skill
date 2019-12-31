@@ -24,8 +24,9 @@ class ShoppingList(MycroftSkill):
 		list_project = self._get_project()
 
 		if list_project is not None:
-			self.todoist_api.items.remove(item_name, project_id=list_project['id'])
-			self.todoist_api.commit()
+			self.log.info(self.todoist_api.items)
+			# self.todoist_api.items.remove(item_name, project_id=list_project['id'])
+			# self.todoist_api.commit()
 
 		self.speak_dialog('remove.from.shopping.list', {'item': item_name})
 
