@@ -18,7 +18,7 @@ class ShoppingList(MycroftSkill):
 		# 	if proj['name'] == 'Grocery List': # TODO make this a configurable setting
 		# 		listProject = proj
 
-		listProject = __get_project__()
+		listProject = self.__get_project__()
 			
 		if listProject is not None:
 			self.todoist_api.items.add(item_name, project_id=listProject['id'])
