@@ -10,15 +10,15 @@ class ShoppingList(MycroftSkill):
 	@intent_file_handler('list.shopping.intent')
 	def handle_list_shopping(self, message):
 		item_name = message.data.get('item')
-		self.todoist_api.sync()
-		projects = self.todoist_api.state['projects']
-		self.log.info('about to print projects state:')
-		self.log.info(projects)
+		# self.todoist_api.sync()
+		# projects = self.todoist_api.state['projects']
 
-		listProject = None
-		for proj in projects:
-			if proj['name'] == 'Grocery List':
-				listProject = proj
+		# listProject = None
+		# for proj in projects:
+		# 	if proj['name'] == 'Grocery List': # TODO make this a configurable setting
+		# 		listProject = proj
+
+		listProject = get_project()
 			
 		if listProject is not None:
 			self.todoist_api.items.add(item_name, project_id=listProject['id'])
@@ -35,6 +35,20 @@ class ShoppingList(MycroftSkill):
 	def handle_is_item_on_list(self, message):
 		item_name = message.data.get('item')
 		self.speak_dialog('ItemNotOnList', {'item': item_name})
+
+	def get_project():
+		self.todoist_api.sync()
+		projects = self.todoist_api.state['projects']
+
+		result = None
+		for proj in projects:
+			if proj['name'] == 'Grocery List': # TODO make this a configurable setting
+				result = proj
+		# self.log.info('about to print projects state:')
+		# self.log.info(projects)
+
+		return result
+
 
 
 def create_skill():
