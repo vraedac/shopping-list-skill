@@ -26,7 +26,7 @@ class ShoppingList(MycroftSkill):
 		if list_project is not None:
 			for task in self.todoist_api.state['items']:
 				self.log.info(task)
-				if task['project_id'] == list_project['id'] and task['name'] == item_name:
+				if task['project_id'] == list_project['id'] and task['content'] == item_name:
 					task.delete()
 					self.todoist_api.commit()
 
