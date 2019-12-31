@@ -18,7 +18,7 @@ class ShoppingList(MycroftSkill):
 		# 	if proj['name'] == 'Grocery List': # TODO make this a configurable setting
 		# 		listProject = proj
 
-		listProject = get_project()
+		listProject = __get_project__()
 			
 		if listProject is not None:
 			self.todoist_api.items.add(item_name, project_id=listProject['id'])
@@ -36,7 +36,7 @@ class ShoppingList(MycroftSkill):
 		item_name = message.data.get('item')
 		self.speak_dialog('ItemNotOnList', {'item': item_name})
 
-	def get_project():
+	def __get_project__(self):
 		self.todoist_api.sync()
 		projects = self.todoist_api.state['projects']
 
