@@ -1,6 +1,6 @@
 {
-	"utterance": "add cookies to my shopping list",
-	"intent_type": "list.shopping.intent",
+	"utterance": "remove cookies from my shopping list",
+	"intent_type": "remove.from.shopping.list.intent",
 	"expected_data": {
 		"item": "cookies"
 	}
