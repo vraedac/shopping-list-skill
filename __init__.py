@@ -43,7 +43,7 @@ class ShoppingList(MycroftSkill):
 					found = True
 					break
 
-		if found = True:
+		if found == True:
 			self.speak_dialog('ItemIsOnList', {'item': item_name})
 		else:
 			self.speak_dialog('ItemNotOnList', {'item': item_name})
