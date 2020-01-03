@@ -48,6 +48,11 @@ class ShoppingList(MycroftSkill):
 		else:
 			self.speak_dialog('ItemNotOnList', {'item': item_name})
 
+	@intent_file_handler('WhatIsOnList.intent')
+	def handle_whats_on_list(self, message):
+		list_items = 'string cheese, bacon and cookies'
+		self.speak_dialog('WhatIsOnList', {'items': list_items})
+
 	def _get_project(self):
 		self.todoist_api.sync()
 		projects = self.todoist_api.state['projects']
