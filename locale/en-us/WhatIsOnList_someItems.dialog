@@ -1,2 +1,2 @@
-your (shopping | grocery) list (contains | has) the following items: {val1}
-the following items (are on | have been added to) your (grocery | shopping) list: {val1}
+your (shopping | grocery) list (contains | has) the following items, {val1}
+the following items (are on | have been added to) your (grocery | shopping) list, {val1}
