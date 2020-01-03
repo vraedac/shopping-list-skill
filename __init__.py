@@ -68,8 +68,8 @@ class ShoppingList(MycroftSkill):
 				last_item = list_items.pop()
 				suffix = ' and ' + last_item
 			
-			# item_string = ', '.join(list_items) + suffix
-			item_string = 'bacon '
+			item_string = ', '.join(list_items) + suffix
+			# item_string = 'bacon '
 			self.log.info('item string: ' + item_string)
 			self.speak_dialog('WhatIsOnList_someItems', {'val1': item_string})
 		else:
