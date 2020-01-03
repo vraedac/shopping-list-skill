@@ -1,4 +1,4 @@
 {
 	"utterance": "what is on my grocery list",
-	"intent_type": "WhatIsOnList_someItems.intent"
+	"intent_type": "WhatIsOnList"
 }
