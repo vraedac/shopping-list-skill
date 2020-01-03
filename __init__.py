@@ -33,7 +33,6 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('IsItemOnList.intent')
 	def handle_is_item_on_list(self, message):
-		self.log.info('in the IsItemOnList intent')
 		item_name = message.data.get('item')
 		list_project = self._get_project()
 		found = False
@@ -51,7 +50,6 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('WhatIsOnList.intent')
 	def handle_whats_on_list(self, message):
-		self.log.info('in the WhatIsOnList intent')
 		list_items = []
 		list_project = self._get_project()
 
@@ -60,8 +58,6 @@ class ShoppingList(MycroftSkill):
 				if item['project_id'] == list_project['id']:
 					list_items.append(item['content'])
 		
-		self.log.info('items:')
-		self.log.info(list_items)
 		if len(list_items) > 0:
 			suffix = ''
 			if len(list_items) > 1:
@@ -69,7 +65,6 @@ class ShoppingList(MycroftSkill):
 				suffix = ' and ' + last_item
 			
 			item_string = ', '.join(list_items) + suffix
-			# item_string = 'bacon '
 			self.log.info('item string: ' + item_string)
 			self.speak_dialog('WhatIsOnList_someItems', {'val1': item_string})
 		else:
