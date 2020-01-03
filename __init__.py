@@ -33,6 +33,7 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('IsItemOnList.intent')
 	def handle_is_item_on_list(self, message):
+		self.log.info('in the IsItemOnList intent')
 		item_name = message.data.get('item')
 		list_project = self._get_project()
 		found = False
@@ -50,6 +51,7 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('WhatIsOnList.intent')
 	def handle_whats_on_list(self, message):
+		self.log.info('in the WhatIsOnList intent')
 		list_items = []
 		list_project = self._get_project()
 
