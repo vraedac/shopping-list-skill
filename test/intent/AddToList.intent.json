@@ -1,7 +1,4 @@
 {
-	"utterance": "is bacon on the shopping list",
-	"intent_type": "IsItemOnList.intent",
-	"expected_data": {
-		"item": "bacon"
-	}
+	"utterance": "what's on my grocery list",
+	"intent_type": "WhatIsOnList_someItems.intent"
 }
