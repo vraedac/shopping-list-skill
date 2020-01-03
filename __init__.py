@@ -50,9 +50,24 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('WhatIsOnList.intent')
 	def handle_whats_on_list(self, message):
-		list_items = ['string cheese', 'cookies', 'bacon']
-		last_item = list_items.pop()
-		self.speak_dialog('WhatIsOnList', {'items': ', '.join(list_items) + ' and ' + last_item})
+		list_items = []
+		list_project = self._get_project()
+
+		if list_project is not None:
+			for item in self.todoist_api.state['items']:
+				if item['project_id'] == list_project['id']:
+					list_items.append(item['content'])
+		
+		if len(list_items) > 0:
+			suffix = ''
+			if len(list_items) > 1:
+				last_item = list_items.pop()
+				suffix = ' and ' + last_item
+			
+			self.speak_dialog('WhatIsOnList_someItems', {'items': ', '.join(list_items) + suffix})
+		else:
+			self.speak_dialog('WhatIsOnList_noItems')
+
 
 	def _get_project(self):
 		self.todoist_api.sync()
