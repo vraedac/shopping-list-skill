@@ -58,6 +58,8 @@ class ShoppingList(MycroftSkill):
 				if item['project_id'] == list_project['id']:
 					list_items.append(item['content'])
 		
+		self.log.info('items:')
+		self.log.info(list_items)
 		if len(list_items) > 0:
 			suffix = ''
 			if len(list_items) > 1:
