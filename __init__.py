@@ -71,7 +71,7 @@ class ShoppingList(MycroftSkill):
 			# item_string = ', '.join(list_items) + suffix
 			item_string = 'cookies'
 			self.log.info('item string: ' + item_string)
-			self.speak_dialog('WhatIsOnList_someItems', {'items': item_string})
+			self.speak_dialog('WhatIsOnList_someItems', {'val1': item_string})
 		else:
 			self.speak_dialog('WhatIsOnList_noItems')
 
