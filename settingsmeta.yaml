@@ -3,6 +3,10 @@ skillMetadata:
   sections:
     - name: Options << Name of section
       fields:
+        - name: list_name
+          type: text
+          label: Todoist Project Name
+          value: "Shopping List"
         - name: internal_python_variable_name
           type: text
           label: Setting Friendly Display Name
