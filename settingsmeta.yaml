@@ -7,9 +7,9 @@ skillMetadata:
           type: text
           label: Todoist Project Name
           value: "Shopping List"
-        - name: internal_python_variable_name
+        - name: todoist_api_key
           type: text
-          label: Setting Friendly Display Name
+          label: Todoist API Key
           value: ""
           placeholder: demo prompt in the input box
     - name: Login << Name of another section
