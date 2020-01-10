@@ -4,16 +4,16 @@ from mycroft import MycroftSkill, intent_file_handler
 class ShoppingList(MycroftSkill):
 	def __init__(self):
 		MycroftSkill.__init__(self)
+		# self.todoist_api = todoist.TodoistAPI('1a40a20b47e1d4e22824c820c9cd057bc738467e')
+
+	def initialize(self):
 		import todoist
-		self.todoist_api = todoist.TodoistAPI('1a40a20b47e1d4e22824c820c9cd057bc738467e')
-		# self.todoist_api = todoist.TodoistAPI(apikey)
+		self.todoist_api = todoist.TodoistAPI(self.settings.get('todoist_api_key'))
 
 	@intent_file_handler('AddToList.intent')
 	def handle_add_to_list(self, message):
 		item_name = message.data.get('item')
 		list_project = self._get_project()
-		apikey = self.settings.get('todoist_api_key')
-		self.log.info('ApiKey: ' + apikey)
 			
 		if list_project is not None:
 			self.todoist_api.items.add(item_name, project_id=list_project['id'])
