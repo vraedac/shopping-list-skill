@@ -5,8 +5,10 @@ class ShoppingList(MycroftSkill):
 	def __init__(self):
 		MycroftSkill.__init__(self)
 		import todoist
-		# self.todoist_api = todoist.TodoistAPI('1a40a20b47e1d4e22824c820c9cd057bc738467e')
-		self.todoist_api = todoist.TodoistAPI(self.settings.get('todoist_api_key'))
+		self.todoist_api = todoist.TodoistAPI('1a40a20b47e1d4e22824c820c9cd057bc738467e')
+		apikey = self.settings.get('todoist_api_key')
+		self.log.info('ApiKey: ' + apikey)
+		# self.todoist_api = todoist.TodoistAPI(apikey)
 
 	@intent_file_handler('AddToList.intent')
 	def handle_add_to_list(self, message):

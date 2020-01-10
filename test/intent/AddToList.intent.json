@@ -1,4 +1,4 @@
 {
-	"utterance": "what's on my grocery list",
-	"intent_type": "WhatIsOnList.intent"
+	"utterance": "add milk to my shopping list",
+	"intent_type": "AddToList.intent"
 }
