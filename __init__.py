@@ -4,6 +4,7 @@ from mycroft import MycroftSkill, intent_file_handler
 class ShoppingList(MycroftSkill):
 	def __init__(self):
 		MycroftSkill.__init__(self)
+		self.test_runner_context = '_TestRunner'
 		# self.todoist_api = todoist.TodoistAPI('1a40a20b47e1d4e22824c820c9cd057bc738467e')
 
 	def initialize(self):
@@ -15,7 +16,7 @@ class ShoppingList(MycroftSkill):
 		item_name = message.data.get('item')
 		list_project = self._get_project()
 			
-		if list_project is not None:
+		if list_project is not None and not message.data.get(self.test_runner_context):
 			self.todoist_api.items.add(item_name, project_id=list_project['id'])
 			self.todoist_api.commit()
 
@@ -26,7 +27,7 @@ class ShoppingList(MycroftSkill):
 		item_name = message.data.get('item')
 		list_project = self._get_project()
 
-		if list_project is not None:
+		if list_project is not None and not message.data.get(self.test_runner_context):
 			for task in self.todoist_api.state['items']:
 				if task['project_id'] == list_project['id'] and task['content'] == item_name:
 					task.delete()
