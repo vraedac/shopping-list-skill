@@ -66,7 +66,7 @@ class ShoppingList(MycroftSkill):
 		list_project = self._get_project()
 
 		if list_project is not None:
-			list_items = self.todoist_api.projects.get_data(list_project['id']).get('items')
+			list_items = [i['content'] for i in self.todoist_api.projects.get_data(list_project['id']).get('items')]
 			# for item in self.todoist_api.state['items']:
 			# 	if item['project_id'] == list_project['id']:
 			# 		list_items.append(item['content'])
