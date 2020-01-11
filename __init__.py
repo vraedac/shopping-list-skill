@@ -62,14 +62,13 @@ class ShoppingList(MycroftSkill):
 		if not self._validate_todoist():
 			return
 
-		list_items = []
-		list_project = self._get_project()
+		list_items = self._get_items()
 
-		if list_project is not None:
-			list_items = [i['content'] for i in self.todoist_api.projects.get_data(list_project['id']).get('items')]
-			# for item in self.todoist_api.state['items']:
-			# 	if item['project_id'] == list_project['id']:
-			# 		list_items.append(item['content'])
+		# list_items = []
+		# list_project = self._get_project()
+
+		# if list_project is not None:
+		# 	list_items = [i['content'] for i in self.todoist_api.projects.get_data(list_project['id']).get('items')]
 		
 		if len(list_items) > 0:
 			suffix = ''
@@ -106,6 +105,16 @@ class ShoppingList(MycroftSkill):
 
 		return result
 
+	def _get_items(self):
+		self.todoist_api.sync()
+
+		items = []
+		project_id = next(p['id'] for p in self.todoist_api.state['projects'] if p['name'] == 'Grocery List')
+
+		if project_id is not None:
+			items = [item['content'] for item in self.todoist_api.get_data(project_id).get('items')]
+
+		return items
 
 
 def create_skill():
