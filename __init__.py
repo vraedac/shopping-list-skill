@@ -9,6 +9,7 @@ class ShoppingList(MycroftSkill):
 
 	def initialize(self):
 		import todoist
+		self.log.info('in the initialize method')
 		self.todoist_api = todoist.TodoistAPI(self.settings.get('todoist_api_key'))
 
 	@intent_file_handler('AddToList.intent')
@@ -65,6 +66,8 @@ class ShoppingList(MycroftSkill):
 	def handle_whats_on_list(self, message):
 		if not self._validate_todoist():
 			return
+
+		self.log.info('in the handler')
 
 		list_items = []
 		list_project = self._get_project()
