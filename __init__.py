@@ -43,16 +43,17 @@ class ShoppingList(MycroftSkill):
 			return
 
 		item_name = message.data.get('item')
-		list_project = self._get_project()
-		found = False
+		item = next(i for i in self._get_items() if i['content'] == item_name)
 
-		if list_project is not None:
-			for task in self.todoist_api.state['items']:
-				if task['project_id'] == list_project['id'] and task['content'] == item_name:
-					found = True
-					break
+		# list_project = self._get_project()
+		# found = False
+		# if list_project is not None:
+		# 	for task in self.todoist_api.state['items']:
+		# 		if task['project_id'] == list_project['id'] and task['content'] == item_name:
+		# 			found = True
+		# 			break
 
-		if found == True:
+		if item is not None:
 			self.speak_dialog('ItemIsOnList', {'item': item_name})
 		else:
 			self.speak_dialog('ItemNotOnList', {'item': item_name})
@@ -64,12 +65,6 @@ class ShoppingList(MycroftSkill):
 
 		list_items = self._get_items()
 
-		# list_items = []
-		# list_project = self._get_project()
-
-		# if list_project is not None:
-		# 	list_items = [i['content'] for i in self.todoist_api.projects.get_data(list_project['id']).get('items')]
-		
 		if len(list_items) > 0:
 			suffix = ''
 			if len(list_items) > 1:
