@@ -27,13 +27,19 @@ class ShoppingList(MycroftSkill):
 			return
 
 		item_name = message.data.get('item')
-		list_project = self._get_project()
+		item = next((i for i in self._get_items() if i['content'] == item_name), None)
+		if item is not None:
+			action_item = api.items.get_by_id(item['id'])
+			action_item.delete()
+			api.commit()
 
-		if list_project is not None and not message.data.get(self.test_runner_context):
-			for task in self.todoist_api.state['items']:
-				if task['project_id'] == list_project['id'] and task['content'] == item_name:
-					task.delete()
-					self.todoist_api.commit()
+		# list_project = self._get_project()
+
+		# if list_project is not None and not message.data.get(self.test_runner_context):
+		# 	for task in self.todoist_api.state['items']:
+		# 		if task['project_id'] == list_project['id'] and task['content'] == item_name:
+		# 			task.delete()
+		# 			self.todoist_api.commit()
 
 		self.speak_dialog('RemoveFromList', {'item': item_name})
 
@@ -43,15 +49,7 @@ class ShoppingList(MycroftSkill):
 			return
 
 		item_name = message.data.get('item')
-		item = next((i for i in self._get_items() if i == item_name), None)
-
-		# list_project = self._get_project()
-		# found = False
-		# if list_project is not None:
-		# 	for task in self.todoist_api.state['items']:
-		# 		if task['project_id'] == list_project['id'] and task['content'] == item_name:
-		# 			found = True
-		# 			break
+		item = next((i for i in self._get_items() if i['content'] == item_name), None)
 
 		if item is not None:
 			self.speak_dialog('ItemIsOnList', {'item': item_name})
@@ -69,9 +67,9 @@ class ShoppingList(MycroftSkill):
 			suffix = ''
 			if len(list_items) > 1:
 				last_item = list_items.pop()
-				suffix = ' and ' + last_item
+				suffix = ' and ' + last_item['content']
 			
-			item_string = ', '.join(list_items) + suffix
+			item_string = ', '.join(i['content'] for i in list_items) + suffix
 			self.speak_dialog('WhatIsOnList_someItems', {'val1': item_string})
 		else:
 			self.speak_dialog('WhatIsOnList_noItems')
@@ -107,7 +105,7 @@ class ShoppingList(MycroftSkill):
 		project_id = next(p['id'] for p in self.todoist_api.state['projects'] if p['name'] == 'Grocery List')
 
 		if project_id is not None:
-			items = [item['content'] for item in self.todoist_api.projects.get_data(project_id).get('items')]
+			items = [item for item in self.todoist_api.projects.get_data(project_id).get('items')]
 
 		return items
 
