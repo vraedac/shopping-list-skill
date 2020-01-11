@@ -6,7 +6,6 @@ class ShoppingList(MycroftSkill):
 		MycroftSkill.__init__(self)
 		self.test_runner_context = '_TestRunner'
 		self.todoist_api = None
-		# self.todoist_api = todoist.TodoistAPI('1a40a20b47e1d4e22824c820c9cd057bc738467e')
 
 	@intent_file_handler('AddToList.intent')
 	def handle_add_to_list(self, message):
@@ -62,8 +61,6 @@ class ShoppingList(MycroftSkill):
 	def handle_whats_on_list(self, message):
 		if not self._validate_todoist():
 			return
-
-		self.log.info('in the handler')
 
 		list_items = []
 		list_project = self._get_project()
