@@ -73,6 +73,12 @@ class ShoppingList(MycroftSkill):
 		else:
 			self.speak_dialog('WhatIsOnList_noItems')
 
+	def _validate_todoist(self):
+		if not self.todoist_api.token:
+			self.speak_dialog('ApiKeyNotSet')
+			return False
+		else:
+			return True
 
 	def _get_project(self):
 		self.todoist_api.sync()
