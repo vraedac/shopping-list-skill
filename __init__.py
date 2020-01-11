@@ -13,6 +13,9 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('AddToList.intent')
 	def handle_add_to_list(self, message):
+		if not self._validate_todoist():
+			return
+
 		item_name = message.data.get('item')
 		list_project = self._get_project()
 			
@@ -24,6 +27,9 @@ class ShoppingList(MycroftSkill):
 	
 	@intent_file_handler('RemoveFromList.intent')
 	def handle_remove_from_list(self, message):
+		if not self._validate_todoist():
+			return
+
 		item_name = message.data.get('item')
 		list_project = self._get_project()
 
@@ -37,6 +43,9 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('IsItemOnList.intent')
 	def handle_is_item_on_list(self, message):
+		if not self._validate_todoist():
+			return
+
 		item_name = message.data.get('item')
 		list_project = self._get_project()
 		found = False
@@ -54,6 +63,9 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('WhatIsOnList.intent')
 	def handle_whats_on_list(self, message):
+		if not self._validate_todoist():
+			return
+
 		list_items = []
 		list_project = self._get_project()
 
