@@ -5,12 +5,8 @@ class ShoppingList(MycroftSkill):
 	def __init__(self):
 		MycroftSkill.__init__(self)
 		self.test_runner_context = '_TestRunner'
+		self.todoist_api = None
 		# self.todoist_api = todoist.TodoistAPI('1a40a20b47e1d4e22824c820c9cd057bc738467e')
-
-	def initialize(self):
-		import todoist
-		self.log.info('in the initialize method')
-		self.todoist_api = todoist.TodoistAPI(self.settings.get('todoist_api_key'))
 
 	@intent_file_handler('AddToList.intent')
 	def handle_add_to_list(self, message):
@@ -89,11 +85,17 @@ class ShoppingList(MycroftSkill):
 			self.speak_dialog('WhatIsOnList_noItems')
 
 	def _validate_todoist(self):
+		if self.todoist_api and self.todoist_api.token:
+			return True
+
+		import todoist
+		self.todoist_api = todoist.TodoistAPI(self.settings.get('todoist_api_key'))
+
 		if not self.todoist_api.token:
 			self.speak_dialog('ApiKeyNotSet')
 			return False
-		else:
-			return True
+		
+		return True
 
 	def _get_project(self):
 		self.todoist_api.sync()
