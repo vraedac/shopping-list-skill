@@ -29,9 +29,9 @@ class ShoppingList(MycroftSkill):
 		item_name = message.data.get('item')
 		item = next((i for i in self._get_items() if i['content'] == item_name), None)
 		if item is not None:
-			action_item = api.items.get_by_id(item['id'])
+			action_item = self.todoist_api.items.get_by_id(item['id'])
 			action_item.delete()
-			api.commit()
+			self.todoist_api.commit()
 
 		# list_project = self._get_project()
 
