@@ -112,7 +112,7 @@ class ShoppingList(MycroftSkill):
 		project_id = next(p['id'] for p in self.todoist_api.state['projects'] if p['name'] == 'Grocery List')
 
 		if project_id is not None:
-			items = [item['content'] for item in self.todoist_api.get_data(project_id).get('items')]
+			items = [item['content'] for item in self.todoist_api.projects.get_data(project_id).get('items')]
 
 		return items
 
