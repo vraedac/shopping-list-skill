@@ -43,7 +43,7 @@ class ShoppingList(MycroftSkill):
 			return
 
 		item_name = message.data.get('item')
-		item = next(i for i in self._get_items() if i == item_name)
+		item = next((i for i in self._get_items() if i == item_name), None)
 
 		# list_project = self._get_project()
 		# found = False
