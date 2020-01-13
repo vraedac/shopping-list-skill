@@ -6,6 +6,22 @@ class ShoppingList(MycroftSkill):
 		MycroftSkill.__init__(self)
 		self.test_runner_context = '_TestRunner'
 		self.todoist_api = None
+		self.parent_project_id = None
+
+	def initialize(self):
+		parent_project_name = self.settings.get('parent_project_name')
+		if not parent_project_name:
+			parent_project_name = 'Shopping Lists'
+
+		self.todoist_api.sync()
+		projects = self.todoist_api.state['projects']
+		parent_project = next((p for p in projects if p['name'] == parent_project_name), None)
+		
+		if not parent_project:
+			parent_project = self.todoist_api.projects.add(parent_project_name)
+			self.todoist_api.commit()
+
+		self.parent_project_id = parent_project['id']
 
 	@intent_file_handler('AddToList.intent')
 	def handle_add_to_list(self, message):
@@ -32,14 +48,6 @@ class ShoppingList(MycroftSkill):
 			action_item = self.todoist_api.items.get_by_id(item['id'])
 			action_item.delete()
 			self.todoist_api.commit()
-
-		# list_project = self._get_project()
-
-		# if list_project is not None and not message.data.get(self.test_runner_context):
-		# 	for task in self.todoist_api.state['items']:
-		# 		if task['project_id'] == list_project['id'] and task['content'] == item_name:
-		# 			task.delete()
-		# 			self.todoist_api.commit()
 
 		self.speak_dialog('RemoveFromList', {'item': item_name})
 
@@ -73,6 +81,13 @@ class ShoppingList(MycroftSkill):
 			self.speak_dialog('WhatIsOnList_someItems', {'val1': item_string})
 		else:
 			self.speak_dialog('WhatIsOnList_noItems')
+
+	@intent_file_handler('CreateList.intent')
+	def handle_create_list(self, message):
+		if not self._validate_todoist()
+			return
+
+		list_name = message.data.get('list_name')
 
 	def _validate_todoist(self):
 		if self.todoist_api and self.todoist_api.token:
