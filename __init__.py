@@ -1,6 +1,5 @@
 from mycroft import MycroftSkill, intent_file_handler
 
-
 class ShoppingList(MycroftSkill):
 	def __init__(self):
 		MycroftSkill.__init__(self)
@@ -9,23 +8,11 @@ class ShoppingList(MycroftSkill):
 		self.parent_project_id = None
 
 	def initialize(self):
-		parent_project_name = self.settings.get('parent_project_name')
-		if not parent_project_name:
-			parent_project_name = 'Shopping Lists'
-
-		self.todoist_api.sync()
-		projects = self.todoist_api.state['projects']
-		parent_project = next((p for p in projects if p['name'] == parent_project_name), None)
-		
-		if not parent_project:
-			parent_project = self.todoist_api.projects.add(parent_project_name)
-			self.todoist_api.commit()
-
-		self.parent_project_id = parent_project['id']
+		self._ensure_todoist_parent_project()
 
 	@intent_file_handler('AddToList.intent')
 	def handle_add_to_list(self, message):
-		if not self._validate_todoist():
+		if not self._ensure_todoist():
 			return
 
 		item_name = message.data.get('item')
@@ -39,7 +26,7 @@ class ShoppingList(MycroftSkill):
 	
 	@intent_file_handler('RemoveFromList.intent')
 	def handle_remove_from_list(self, message):
-		if not self._validate_todoist():
+		if not self._ensure_todoist():
 			return
 
 		item_name = message.data.get('item')
@@ -51,9 +38,10 @@ class ShoppingList(MycroftSkill):
 
 		self.speak_dialog('RemoveFromList', {'item': item_name})
 
+
 	@intent_file_handler('IsItemOnList.intent')
 	def handle_is_item_on_list(self, message):
-		if not self._validate_todoist():
+		if not self._ensure_todoist():
 			return
 
 		item_name = message.data.get('item')
@@ -66,7 +54,7 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('WhatIsOnList.intent')
 	def handle_whats_on_list(self, message):
-		if not self._validate_todoist():
+		if not self._ensure_todoist():
 			return
 
 		list_items = self._get_items()
@@ -84,22 +72,61 @@ class ShoppingList(MycroftSkill):
 
 	@intent_file_handler('CreateList.intent')
 	def handle_create_list(self, message):
-		if not self._validate_todoist()
+		if not self._ensure_todoist():
 			return
 
 		list_name = message.data.get('list_name')
+		existing_list = next((p for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'] == list_name), None)
 
-	def _validate_todoist(self):
+		if not existing_list:
+			self.todoist_api.projects.add(list_name, parent_id=self.parent_project_id)
+			self.todoist_api.commit()
+			self.speak_dialog('CreateList_success', {'list_name': list_name})
+		else:
+			self.speak_dialog('CreateList_alreadyExists', {'list_name': list_name})
+
+	# this should be called as the first step by each skill to ensure Todoist is connected; will play the "API key not configured" dialog if not
+	def _ensure_todoist(self):
+		if self.todoist_api and self.todoist_api.token:
+			return True
+
+		if not self._init_todoist():
+			self.speak_dialog('ApiKeyNotSet')
+			return False
+		
+		return True
+
+	# checks if the todoist API has been initialized successfully and attempts to initialize it if not.  returns true if successful, false otherwise
+	def _init_todoist(self):
 		if self.todoist_api and self.todoist_api.token:
 			return True
 
 		import todoist
 		self.todoist_api = todoist.TodoistAPI(self.settings.get('todoist_api_key'))
 
-		if not self.todoist_api.token:
-			self.speak_dialog('ApiKeyNotSet')
+		return not not self.todoist_api.token
+
+	# checks if the todoist parent project exists and creates it if not.  returns true if successful, false otherwise
+	def _ensure_todoist_parent_project(self):
+		if self.parent_project_id:
+			return True
+
+		if (not self.todoist_api or not self.todoist_api.token) and not self._init_todoist():
 			return False
+
+		parent_project_name = self.settings.get('parent_project_name')
+		if not parent_project_name:
+			parent_project_name = 'Shopping Lists'
+
+		self.todoist_api.sync()
+		projects = self.todoist_api.state['projects']
+		parent_project = next((p for p in projects if p['name'] == parent_project_name), None)
 		
+		if not parent_project:
+			parent_project = self.todoist_api.projects.add(parent_project_name)
+			self.todoist_api.commit()
+
+		self.parent_project_id = parent_project['id']
 		return True
 
 	def _get_project(self):
