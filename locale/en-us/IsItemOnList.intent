@@ -1,2 +1,2 @@
-(is | are) {item} on (my | the | your | ) (shopping | grocery) list
-does (shopping | grocery) list (have | contain) {item}
+(is | are) {item} on (my | the | our) {list_name} (shopping | grocery | ) list
+does (my | the | our) {list_name} (shopping | grocery | ) list (have | contain | include) {item}

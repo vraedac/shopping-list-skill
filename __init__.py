@@ -58,30 +58,42 @@ class ShoppingList(MycroftSkill):
 			return
 
 		item_name = message.data.get('item')
-		item = next((i for i in self._get_items() if i['content'] == item_name), None)
+		list_name = message.data.get('list_name')
+		list_project = self._get_project(list_name)
 
-		if item is not None:
-			self.speak_dialog('ItemIsOnList', {'item': item_name})
+		if list_project:
+			item = next((i for i in self._get_items(list_name) if i['content'] == item_name), None)
+
+			if item:
+				self.speak_dialog('IsItemOnList_yes', {'item': item_name, 'list_name': list_name})
+			else:
+				self.speak_dialog('IsItemOnList_no', {'item': item_name, 'list_name': list_name})
 		else:
-			self.speak_dialog('ItemNotOnList', {'item': item_name})
+			self.speak_dialog('ListNotFound', {'list_name': list_name})
 
 	@intent_file_handler('WhatIsOnList.intent')
 	def handle_whats_on_list(self, message):
 		if not self._ensure_todoist():
 			return
 
-		list_items = self._get_items()
+		list_name = message.data.get('list_name')
+		list_project = self._get_project(list_name)
 
-		if len(list_items) > 0:
-			suffix = ''
-			if len(list_items) > 1:
-				last_item = list_items.pop()
-				suffix = ' and ' + last_item['content']
-			
-			item_string = ', '.join(i['content'] for i in list_items) + suffix
-			self.speak_dialog('WhatIsOnList_someItems', {'val1': item_string})
+		if list_project:
+			list_items = self._get_items(list_name)
+
+			if len(list_items) > 0:
+				suffix = ''
+				if len(list_items) > 1:
+					last_item = list_items.pop()
+					suffix = ' and ' + last_item['content']
+				
+				item_string = ', '.join(i['content'] for i in list_items) + suffix
+				self.speak_dialog('WhatIsOnList_someItems', {'list_name': list_name, 'val1': item_string})
+			else:
+				self.speak_dialog('WhatIsOnList_noItems', {'list_name': list_name})
 		else:
-			self.speak_dialog('WhatIsOnList_noItems')
+			self.speak_dialog('ListNotFound', {'list_name': list_name})
 
 	@intent_file_handler('CreateList.intent')
 	def handle_create_list(self, message):
@@ -146,14 +158,6 @@ class ShoppingList(MycroftSkill):
 		self.todoist_api.sync()
 		result = next((p for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'] == name), None)
 		return result
-		# projects = self.todoist_api.state['projects']
-
-		# result = None
-		# for proj in projects:
-		# 	if proj['name'] == 'Grocery List': # TODO make this a configurable setting
-		# 		result = proj
-
-		# return result
 
 	def _get_items(self, list_name):
 		self.todoist_api.sync()
