@@ -40,7 +40,7 @@ class ShoppingList(MycroftSkill):
 			return
 
 		if list_project:
-			item = next((i for i in self._get_items(list_name) if i['content'] == item_name), None)
+			item = next((i for i in self._get_items(list_name) if i['content'].casefold() == item_name.casefold()), None)
 
 			if item is not None:
 				action_item = self.todoist_api.items.get_by_id(item['id'])
@@ -62,7 +62,7 @@ class ShoppingList(MycroftSkill):
 		list_project = self._get_project(list_name)
 
 		if list_project:
-			item = next((i for i in self._get_items(list_name) if i['content'] == item_name), None)
+			item = next((i for i in self._get_items(list_name) if i['content'].casefold() == item_name.casefold()), None)
 
 			if item:
 				self.speak_dialog('IsItemOnList_yes', {'item': item_name, 'list_name': list_name})
@@ -101,7 +101,8 @@ class ShoppingList(MycroftSkill):
 			return
 
 		list_name = message.data.get('list_name')
-		existing_list = next((p for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'] == list_name), None)
+		# existing_list = next((p for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'] == list_name), None)
+		existing_list = self._get_project(list_name)
 
 		if not existing_list:
 			self.todoist_api.projects.add(list_name, parent_id=self.parent_project_id)
@@ -156,14 +157,14 @@ class ShoppingList(MycroftSkill):
 
 	def _get_project(self, name):
 		self.todoist_api.sync()
-		result = next((p for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'] == name), None)
+		result = next((p for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'].casefold() == name.casefold()), None)
 		return result
 
 	def _get_items(self, list_name):
 		self.todoist_api.sync()
 
 		items = []
-		project_id = next(p['id'] for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'] == list_name)
+		project_id = next(p['id'] for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'].casefold() == list_name.casefold())
 
 		if project_id:
 			items = [item for item in self.todoist_api.projects.get_data(project_id).get('items')]
