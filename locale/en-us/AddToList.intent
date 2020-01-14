@@ -1,2 +1,2 @@
-add {item} to (my | the | our | your) (shopping | grocery) list
-put {item} on (my | the | our | your) (shopping | grocery) list
+add {item} to (my | the | our) {list_name} (shopping | grocery | ) list
+put {item} on (my | the | our) {list_name} (shopping | grocery | ) list

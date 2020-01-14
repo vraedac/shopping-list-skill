@@ -16,13 +16,16 @@ class ShoppingList(MycroftSkill):
 			return
 
 		item_name = message.data.get('item')
-		list_project = self._get_project()
+		list_name = message.data.get('list_name')
+		list_project = self._get_project(list_name)
 			
-		if list_project is not None and not message.data.get(self.test_runner_context):
-			self.todoist_api.items.add(item_name, project_id=list_project['id'])
-			self.todoist_api.commit()
-
-		self.speak_dialog('AddToList', {'item': item_name})
+		if not message.data.get(self.test_runner_context):
+			if list_project:
+				self.todoist_api.items.add(item_name, project_id=list_project['id'])
+				self.todoist_api.commit()
+				self.speak_dialog('AddToList_success', {'item': item_name, 'list_name': list_name})
+			else:
+				self.speak_dialog('AddToList_listNotFound', {'list_name': list_name})
 	
 	@intent_file_handler('RemoveFromList.intent')
 	def handle_remove_from_list(self, message):
@@ -129,25 +132,27 @@ class ShoppingList(MycroftSkill):
 		self.parent_project_id = parent_project['id']
 		return True
 
-	def _get_project(self):
+	def _get_project(self, name):
 		self.todoist_api.sync()
-		projects = self.todoist_api.state['projects']
-
-		result = None
-		for proj in projects:
-			if proj['name'] == 'Grocery List': # TODO make this a configurable setting
-				result = proj
-
+		result = next((p for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'] == name), None)
 		return result
+		# projects = self.todoist_api.state['projects']
 
-	def _get_items(self):
+		# result = None
+		# for proj in projects:
+		# 	if proj['name'] == 'Grocery List': # TODO make this a configurable setting
+		# 		result = proj
+
+		# return result
+
+	def _get_items(self, list_name):
 		self.todoist_api.sync()
 
 		items = []
-		project_id = next(p['id'] for p in self.todoist_api.state['projects'] if p['name'] == 'Grocery List')
+		project_id = next(p['id'] for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'] == list_name)
 
-		if project_id is not None:
-			items = [item for item in self.todoist_api.projects.get_data(project_id).get('items')]
+		if project_id:
+			items = [item for item in api.projects.get_data(project_id).get('items')]
 
 		return items
 
