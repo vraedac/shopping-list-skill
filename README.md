@@ -1,14 +1,15 @@
 # <img src="https://raw.githack.com/FortAwesome/Font-Awesome/master/svgs/solid/clipboard-list.svg" card_color="#FD9E66" width="50" height="50" style="vertical-align:bottom"/> Shopping List
-Manage a shopping list
+Manages a group of shopping lists on Todoist
 
 ## About
-Manage a shopping list as a Todoist project.  you can add or remove items, query specific items or have mycroft read the whole list to you.
+This skill allows you to create and manage a group of named shopping lists.  It uses Todoist as the backend, and organizes all lists as sub-projects under a single Todoist parent Project, the name of which is customizeable. 
 
 ## Examples
-* "Add cookies to my shopping list"
-* "Remove string cheese from the grocery list"
-* "What's on my grocery list?"
-* "Is bacon on the shopping list?"
+* "Create a list named Test."
+* "Add cookies to my Test list."
+* "Remove string cheese from the Test list."
+* "What's on my Test list?"
+* "Is bacon on the Test list?"
 
 ## Credits
 vraedac
@@ -21,4 +22,3 @@ vraedac
 #List
 #Grocery
 #Todoist
-
