@@ -25,7 +25,7 @@ class ShoppingList(MycroftSkill):
 				self.todoist_api.commit()
 				self.speak_dialog('AddToList_success', {'item': item_name, 'list_name': list_name})
 			else:
-				self.speak_dialog('AddToList_listNotFound', {'list_name': list_name})
+				self.speak_dialog('ListNotFound', {'list_name': list_name})
 	
 	@intent_file_handler('RemoveFromList.intent')
 	def handle_remove_from_list(self, message):
@@ -33,13 +33,23 @@ class ShoppingList(MycroftSkill):
 			return
 
 		item_name = message.data.get('item')
-		item = next((i for i in self._get_items() if i['content'] == item_name), None)
-		if item is not None:
-			action_item = self.todoist_api.items.get_by_id(item['id'])
-			action_item.delete()
-			self.todoist_api.commit()
+		list_name = message.data.get('list_name')
+		list_project = self._get_project(list_name)
 
-		self.speak_dialog('RemoveFromList', {'item': item_name})
+		if message.data.get(self.test_runner_context):
+			return
+
+		if list_project:
+			item = next((i for i in self._get_items(list_name) if i['content'] == item_name), None)
+
+			if item is not None:
+				action_item = self.todoist_api.items.get_by_id(item['id'])
+				action_item.delete()
+				self.todoist_api.commit()
+
+			self.speak_dialog('RemoveFromList_success', {'item': item_name, 'list_name': list_name})
+		else:
+			self.speak_dialog('ListNotFound', {'list_name': list_name})
 
 
 	@intent_file_handler('IsItemOnList.intent')
@@ -152,7 +162,7 @@ class ShoppingList(MycroftSkill):
 		project_id = next(p['id'] for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'] == list_name)
 
 		if project_id:
-			items = [item for item in api.projects.get_data(project_id).get('items')]
+			items = [item for item in self.todoist_api.projects.get_data(project_id).get('items')]
 
 		return items
 
