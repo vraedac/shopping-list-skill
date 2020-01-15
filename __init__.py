@@ -3,7 +3,6 @@ from mycroft import MycroftSkill, intent_file_handler
 class ShoppingList(MycroftSkill):
 	def __init__(self):
 		MycroftSkill.__init__(self)
-		self.test_runner_context = '_TestRunner'
 		self.todoist_api = None
 		self.parent_project_id = None
 
@@ -19,13 +18,12 @@ class ShoppingList(MycroftSkill):
 		list_name = message.data.get('list_name')
 		list_project = self._get_project(list_name)
 			
-		if not message.data.get(self.test_runner_context):
-			if list_project:
-				self.todoist_api.items.add(item_name, project_id=list_project['id'])
-				self.todoist_api.commit()
-				self.speak_dialog('AddToList_success', {'item': item_name, 'list_name': list_name})
-			else:
-				self.speak_dialog('ListNotFound', {'list_name': list_name})
+		if list_project:
+			self.todoist_api.items.add(item_name, project_id=list_project['id'])
+			self.todoist_api.commit()
+			self.speak_dialog('AddToList_success', {'item': item_name, 'list_name': list_name})
+		else:
+			self.speak_dialog('ListNotFound', {'list_name': list_name})
 	
 	@intent_file_handler('RemoveFromList.intent')
 	def handle_remove_from_list(self, message):
@@ -35,9 +33,6 @@ class ShoppingList(MycroftSkill):
 		item_name = message.data.get('item')
 		list_name = message.data.get('list_name')
 		list_project = self._get_project(list_name)
-
-		if message.data.get(self.test_runner_context):
-			return
 
 		if list_project:
 			item = next((i for i in self._get_items(list_name) if i['content'].casefold() == item_name.casefold()), None)

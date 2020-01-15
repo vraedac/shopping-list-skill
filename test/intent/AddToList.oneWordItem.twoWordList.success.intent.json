@@ -1,0 +1,9 @@
+{
+	"utterance": "add milk to the giant eagle shopping list",
+	"intent_type": "AddToList.intent",
+	"expected_dialog": "AddToList_success",
+	"expected_data": {
+		"list_name": "giant eagle",
+		"item": "milk"
+	}
+}

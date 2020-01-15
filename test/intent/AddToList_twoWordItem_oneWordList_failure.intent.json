@@ -1,0 +1,9 @@
+{
+	"utterance": "add baby carrots to my kroger list",
+	"intent_type": "AddToList.intent",
+	"expected_dialog": "ListNotFound",
+	"expected_data": {
+		"item": "baby carrots",
+		"list_name": "kroger"
+	}
+}

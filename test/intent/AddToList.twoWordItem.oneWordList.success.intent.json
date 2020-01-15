@@ -1,0 +1,9 @@
+{
+	"utterance": "add string cheese to the target list",
+	"intent_type": "AddToList.intent",
+	"expected_dialog": "AddToList_success",
+	"expected_data": {
+		"item": "string cheese",
+		"list_name": "target"
+	}
+}

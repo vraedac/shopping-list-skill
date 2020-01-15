@@ -1,0 +1,9 @@
+{
+	"utterance": "add milk to the target shopping list",
+	"intent_type": "AddToList.intent",
+	"expected_dialog": "AddToList_success",
+	"expected_data": {
+		"item": "milk",
+		"list_name": "target"
+	}
+}
