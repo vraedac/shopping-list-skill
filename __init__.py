@@ -152,14 +152,14 @@ class ShoppingList(MycroftSkill):
 
 	def _get_project(self, name):
 		self.todoist_api.sync()
-		result = next((p for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'].casefold() == name.casefold()), None)
+		result = next((p for p in self.todoist_api.state['projects'] if p['name'] and p['parent_id'] == self.parent_project_id and p['name'].casefold() == name.casefold()), None)
 		return result
 
 	def _get_items(self, list_name):
 		self.todoist_api.sync()
 
 		items = []
-		project_id = next(p['id'] for p in self.todoist_api.state['projects'] if p['parent_id'] == self.parent_project_id and p['name'].casefold() == list_name.casefold())
+		project_id = next(p['id'] for p in self.todoist_api.state['projects'] if p['name'] and p['parent_id'] == self.parent_project_id and p['name'].casefold() == list_name.casefold())
 
 		if project_id:
 			items = [item for item in self.todoist_api.projects.get_data(project_id).get('items')]
